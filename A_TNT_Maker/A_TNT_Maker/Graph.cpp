@@ -14,6 +14,10 @@ Graph::~Graph()
 	delete[] path;
 }
 
-void Graph::CalculatePath() {
+void Graph::CalculatePath(int x, int y)
+{
+	if (x == **end && y == *(*end + 1)) return; //Reached end
 
 }
+
+
