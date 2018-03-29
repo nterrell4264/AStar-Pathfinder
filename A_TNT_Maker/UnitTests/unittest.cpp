@@ -61,7 +61,16 @@ namespace UnitTests
 
 		TEST_METHOD(TestGetNextPosition)
 		{
+			int x = -1;
+			int y = -1;
+			bool ret;
 
+			for (int i = 0; i < INT_MAX; i++)
+			{
+				ret = GetNextPosition(x, y);
+			}
+
+			Assert::IsFalse(ret);
 		}
 
 		TEST_METHOD(TestSetStartBadX)
