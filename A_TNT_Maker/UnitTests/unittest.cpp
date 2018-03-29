@@ -109,5 +109,10 @@ namespace UnitTests
 			bool ret = GetEnd(x, y);
 			Assert::IsFalse(ret);
 		}
+
+		TEST_METHOD(TestRestart)
+		{
+			//Test that the path restarts
+		}
 	};
 }
