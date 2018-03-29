@@ -2,7 +2,7 @@
 class Vertex
 {
 public:
-	Vertex(int x, int y, bool canRight, bool canUp, bool canLeft, bool canDown);
+	Vertex(int x, int y);
 	~Vertex();
 
 	//Variables
@@ -12,5 +12,8 @@ public:
 	int endDis; //Distance from end
 	bool* adjacencies;
 	bool visited;
+
+	//Functions
+	void AddAdjacency(int dir);
 };
 

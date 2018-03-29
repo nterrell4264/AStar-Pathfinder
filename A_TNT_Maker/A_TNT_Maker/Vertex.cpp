@@ -1,13 +1,17 @@
 #include "stdafx.h"
 #include "Vertex.h"
 
-Vertex::Vertex(int x, int y, bool canRight, bool canUp, bool canLeft, bool canDown) {
+Vertex::Vertex(int x, int y) {
 	xPos = x;
 	yPos = y;
-	adjacencies = new bool[4] {canRight, canUp, canLeft, canDown};
+	adjacencies = new bool[4]{ false, false, false, false };
 }
 
 Vertex::~Vertex()
 {
 	delete[] adjacencies;
+}
+
+void Vertex::AddAdjacency(int dir) {
+	adjacencies[dir] = true;
 }

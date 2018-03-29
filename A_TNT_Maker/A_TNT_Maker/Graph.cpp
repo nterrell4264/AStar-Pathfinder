@@ -12,7 +12,11 @@ Graph::Graph(int*** maze, int width, int height)
 		for (int x = 0; x < width; x++) {
 			matrix[x] = new Vertex*[height];
 			for (int y = 0; y < height; y++) {
-				matrix[x][y] = new Vertex(x, y, (*maze)[x + 1][y] == 0, (*maze)[x][y + 1] == 0, (*maze)[x - 1][y] == 0, (*maze)[x][y - 1] == 0);
+				matrix[x][y] = new Vertex(x, y);
+				if (x < width - 1 && (*maze)[x + 1][y] == 0) matrix[x][y]->AddAdjacency(0);
+				if (y < height - 1 && (*maze)[x][y + 1] == 0) matrix[x][y]->AddAdjacency(1);
+				if (x > 0 && (*maze)[x - 1][y] == 0) matrix[x][y]->AddAdjacency(2);
+				if (y > 0 && (*maze)[x][y - 1] == 0) matrix[x][y]->AddAdjacency(3);
 		}
 	}
 	path = new vector<Vertex*>[0];
@@ -35,6 +39,7 @@ bool Graph::CalculatePath(int x, int y)
 	if (x == *end && y == *(end + 1)) return true; //Reached end
 	//Add vertex to path
 	(*path).push_back(vertex);
+	pathLength++;
 	//Recursively finds next step
 	if ((*vertex).adjacencies) {
 		if (CalculatePath(x + 1, y)) return true;
@@ -48,6 +53,8 @@ bool Graph::CalculatePath(int x, int y)
 	if (*((*vertex).adjacencies + 3)) {
 		if (CalculatePath(x, y - 1)) return true;
 	}
+	(*path).pop_back();
+	pathLength--;
 	return false;
 }
 
