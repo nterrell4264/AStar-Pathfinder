@@ -1,21 +1,23 @@
 #pragma once
 #include <vector>
-#include "Vector.h"
+#include "Vertex.h"
+using namespace std;
 class Graph
 {
 public:
-	Graph();
+	Graph(int*** maze, int width, int height);
 	~Graph();
 
-	int* start[2];
-	int* end[2];
+	Vertex*** matrix;
+	int*** mazeP; //Maze pointer
+	int* start;
+	int* end;
 
-	vector<Vector> path = nullptr;
+	vector<Vertex*>* path;
 	int pathLength = 0;
 
-	Vector* currentNode = nullptr;
 	int currentPathIndex = 0;
 
-	void CalculatePath(int x, int y);
+	bool CalculatePath(int x, int y);
 };
 
