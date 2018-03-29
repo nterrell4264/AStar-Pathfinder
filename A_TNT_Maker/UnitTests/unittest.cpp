@@ -11,7 +11,7 @@ _declspec(dllimport) bool SetStart(int xpos, int ypos);
 _declspec(dllimport) bool GetStart(int& xpos, int& ypos);
 _declspec(dllimport) bool SetEnd(int xpos, int ypos);
 _declspec(dllimport) bool GetEnd(int& xpos, int& ypos);
-
+_declspec(dllimport) bool Restart();
 namespace UnitTests
 {		
 	TEST_CLASS(UnitTest1)
@@ -122,6 +122,7 @@ namespace UnitTests
 		TEST_METHOD(TestRestart)
 		{
 			//Test that the path restarts
+
 		}
 	};
 }
