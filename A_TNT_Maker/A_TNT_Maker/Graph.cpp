@@ -19,23 +19,23 @@ Graph::Graph(int*** maze, int width, int height)
 				if (y > 0 && (*maze)[x][y - 1] == 0) matrix[x][y]->AddAdjacency(3);
 		}
 	}
-	path = new vector<Vertex*>[0];
+	path = new vector<Vertex*>[1];
 }
 
 Graph::~Graph()
 {
-	/*delete[] start;
+	delete[] start;
 	delete[] end;
 
 	for (int i = 0; i < pathLength; i++) {
 		delete (*path)[i];
-	}*/
+	}
 }
 
 bool Graph::CalculatePath(int x, int y)
 {
 	Vertex* vertex = matrix[x][y];
-	if (*mazeP[x][y] != 0 || (*vertex).visited) return false;
+	if ((*mazeP)[x][y] != 0 || (*vertex).visited) return false;
 	if (x == *end && y == *(end + 1)) return true; //Reached end
 	//Add vertex to path
 	(*path).push_back(vertex);
