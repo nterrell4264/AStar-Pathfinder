@@ -65,7 +65,7 @@ namespace UnitTests
 			int y = -1;
 			bool ret;
 
-			for (int i = 0; i < INT_MAX; i++)
+			for (int i = 0; i < 100; i++)
 			{
 				ret = GetNextPosition(x, y);
 			}

@@ -40,6 +40,7 @@ bool Graph::CalculatePath(int x, int y)
 	//Add vertex to path
 	(*path).push_back(vertex);
 	pathLength++;
+	(*vertex).visited = true;
 	//Recursively finds next step
 	if ((*vertex).adjacencies) {
 		if (CalculatePath(x + 1, y)) return true;
