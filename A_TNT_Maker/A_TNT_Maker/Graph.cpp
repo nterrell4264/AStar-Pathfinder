@@ -1,5 +1,7 @@
 #include "stdafx.h"
+#include <algorithm>
 #include "Graph.h"
+using namespace std;
 
 Graph::Graph(int*** maze, int width, int height)
 {
@@ -13,10 +15,10 @@ Graph::Graph(int*** maze, int width, int height)
 			matrix[x] = new Vertex*[height];
 			for (int y = 0; y < height; y++) {
 				Vertex* vertex = new Vertex(x, y);
-				if (x < width - 1 && (*maze)[x + 1][y] == 0) vertex->AddAdjacency(0);
-				if (y < height - 1 && (*maze)[x][y + 1] == 0) vertex->AddAdjacency(1);
-				if (x > 0 && (*maze)[x - 1][y] == 0) vertex->AddAdjacency(2);
-				if (y > 0 && (*maze)[x][y - 1] == 0) vertex->AddAdjacency(3);
+				if (x < width - 1 && (*maze)[x + 1][y] != 0) vertex->AddAdjacency(0);
+				if (y < height - 1 && (*maze)[x][y + 1] != 0) vertex->AddAdjacency(1);
+				if (x > 0 && (*maze)[x - 1][y] != 0) vertex->AddAdjacency(2);
+				if (y > 0 && (*maze)[x][y - 1] != 0) vertex->AddAdjacency(3);
 				vertex->startDis = abs(x - *start) + abs(y - *(start + 1));
 				vertex->endDis = abs(x - *end) + abs(y - *(end + 1));
 				matrix[x][y] = vertex;
@@ -35,32 +37,59 @@ Graph::~Graph()
 	}
 }
 
+void Graph::BuildPath() {
+	//Updates start and end distances
+	for (int x = 0; x < mWidth; x++) {
+		for (int y = 0; y < mHeight; y++) {
+			Vertex* vertex = matrix[x][y];
+			vertex->startDis = abs(x - *start) + abs(y - *(start + 1));
+			vertex->endDis = abs(x - *end) + abs(y - *(end + 1));
+		}
+	}
+	//Starts pathfinding
+	CalculatePath(*start, *(start + 1));
+}
+
 bool Graph::CalculatePath(int x, int y)
 {
 	Vertex* vertex = matrix[x][y];
-	if ((*mazeP)[x][y] != 0 || (*vertex).visited) return false;
+	if ((*mazeP)[x][y] == 0 || (*vertex).visited) return false;
 	//Add vertex to path
 	(*path).push_back(vertex);
 	pathLength++;
 	if (x == *end && y == *(end + 1)) return true; //Reached end
 	(*vertex).visited = true;
-	//Recursively finds next step
-	if (*((*vertex).adjacencies)) {
-		if (CalculatePath(x + 1, y)) return true;
-	}
-	if (*((*vertex).adjacencies + 1)) {
-		if (CalculatePath(x, y + 1)) return true;
-	}
-	if (*((*vertex).adjacencies + 2)) {
-		if (CalculatePath(x - 1, y)) return true;
-	}
-	if (*((*vertex).adjacencies + 3)) {
-		if (CalculatePath(x, y - 1)) return true;
+	//Recursively finds next step, in order of distance from the endpoint
+	for (Vertex* neighbor : AdjacencyDistances(vertex)) {
+		if (CalculatePath((*neighbor).xPos, (*neighbor).yPos)) return true;
 	}
 	//Removes vertex from path if there is no path from it
 	(*path).pop_back();
 	pathLength--;
 	return false;
+}
+
+vector<Vertex*> Graph::AdjacencyDistances(Vertex* vertex) {
+	vector<Vertex*> neighbors(4);
+	//Finds valid neighbors
+	if (*((*vertex).adjacencies)) { //Right
+		neighbors.push_back(matrix[(*vertex).xPos - 1][(*vertex).yPos]);
+	}
+	if (*((*vertex).adjacencies + 1)) { //Up
+		neighbors.push_back(matrix[(*vertex).xPos][(*vertex).yPos - 1]);
+	}
+	if (*((*vertex).adjacencies + 2)) { //Left
+		neighbors.push_back(matrix[(*vertex).xPos + 1][(*vertex).yPos]);
+	}
+	if (*((*vertex).adjacencies + 3)) { //Down
+		neighbors.push_back(matrix[(*vertex).xPos][(*vertex).yPos + 1]);
+	}
+	sort(neighbors.begin(), neighbors.end(), sortDis); //Sorts list in ascending order by heuristics value
+	return neighbors;
+}
+
+bool sortDis(const Vertex* a, const Vertex* b) {
+	return ((*a).startDis + (*a).endDis) < ((*b).startDis + (*b).endDis);
 }
 
 

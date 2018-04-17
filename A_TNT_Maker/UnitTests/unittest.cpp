@@ -3,15 +3,15 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-_declspec(dllimport) char* GetTeam();
-_declspec(dllimport) bool SetMaze(const int** data, int width, int height);
-_declspec(dllimport) int** GetMaze(int& width, int& height);
-_declspec(dllimport) bool GetNextPosition(int& xpos, int& ypos);
-_declspec(dllimport) bool SetStart(int xpos, int ypos);
-_declspec(dllimport) bool GetStart(int& xpos, int& ypos);
-_declspec(dllimport) bool SetEnd(int xpos, int ypos);
-_declspec(dllimport) bool GetEnd(int& xpos, int& ypos);
-_declspec(dllimport) bool Restart();
+extern "C" _declspec(dllimport) char* GetTeam();
+extern "C" _declspec(dllimport) bool SetMaze(const int** data, int width, int height);
+extern "C" _declspec(dllimport) int** GetMaze(int& width, int& height);
+extern "C" _declspec(dllimport) bool GetNextPosition(int& xpos, int& ypos);
+extern "C" _declspec(dllimport) bool SetStart(int xpos, int ypos);
+extern "C" _declspec(dllimport) bool GetStart(int& xpos, int& ypos);
+extern "C" _declspec(dllimport) bool SetEnd(int xpos, int ypos);
+extern "C" _declspec(dllimport) bool GetEnd(int& xpos, int& ypos);
+extern "C" _declspec(dllimport) bool Restart();
 namespace UnitTests
 {		
 	TEST_CLASS(UnitTest1)

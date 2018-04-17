@@ -8,16 +8,24 @@ public:
 	Graph(int*** maze, int width, int height);
 	~Graph();
 
+	//Vertex graph for pathfinding
 	Vertex*** matrix = nullptr;
-	int*** mazeP = nullptr; //Maze pointer
 	int* start = nullptr;
 	int* end = nullptr;
+	//Original maze for reference
+	int*** mazeP = nullptr; //Maze pointer
+	int mWidth = 0;
+	int mHeight = 0;
 
 	vector<Vertex*>* path = nullptr;
 	int pathLength = 0;
 
 	int currentPathIndex = 0;
 
-	bool CalculatePath(int x, int y);
+	void BuildPath(); //Initializes pathfinding
+private:
+	bool CalculatePath(int x, int y); //Recursive pathfinding function
+	vector<Vertex*> AdjacencyDistances(Vertex* vertex); //Returns a sorted list of a vertex's neighbors using the distance heuristic
 };
 
+bool sortDis(const Vertex* a, const Vertex* b); //Function that compares two heuristic values to find the lowest
