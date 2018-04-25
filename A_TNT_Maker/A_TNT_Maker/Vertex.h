@@ -8,8 +8,7 @@ public:
 	//Variables
 	int xPos;
 	int yPos;
-	int startDis; //Distance from start
-	int endDis; //Distance from end
+	int heuristic; //A number that determines how fast the tile seems to be. Lower numbers are better.
 	bool* adjacencies;
 	bool visited;
 

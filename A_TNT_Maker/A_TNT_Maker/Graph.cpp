@@ -11,16 +11,17 @@ Graph::Graph(int*** maze, int width, int height)
 	//Defines graph
 	mazeP = maze;
 	matrix = new Vertex**[width];
-		for (int x = 0; x < width; x++) {
+		for (int x = 0; x < width; x++) { //Creates and populates rows
 			matrix[x] = new Vertex*[height];
-			for (int y = 0; y < height; y++) {
+			for (int y = 0; y < height; y++) { //Creates and populates cells in the row
 				Vertex* vertex = new Vertex(x, y);
-				if (x < width - 1 && (*maze)[x + 1][y] != 0) vertex->AddAdjacency(0);
-				if (y < height - 1 && (*maze)[x][y + 1] != 0) vertex->AddAdjacency(1);
-				if (x > 0 && (*maze)[x - 1][y] != 0) vertex->AddAdjacency(2);
-				if (y > 0 && (*maze)[x][y - 1] != 0) vertex->AddAdjacency(3);
-				vertex->startDis = abs(x - *start) + abs(y - *(start + 1));
-				vertex->endDis = abs(x - *end) + abs(y - *(end + 1));
+				if ((*maze)[x][y] != 0) { //Doesn't bother adding info to walls
+					//Checks for open neighbors for pathfinding
+					if (x < width - 1 && (*maze)[x + 1][y] != 0) vertex->AddAdjacency(0);
+					if (y > 0 && (*maze)[x][y - 1] != 0) vertex->AddAdjacency(1);
+					if (x > 0 && (*maze)[x - 1][y] != 0) vertex->AddAdjacency(2);
+					if (y < height - 1 && (*maze)[x][y + 1] != 0) vertex->AddAdjacency(3);
+				}
 				matrix[x][y] = vertex;
 		}
 	}
@@ -38,12 +39,11 @@ Graph::~Graph()
 }
 
 void Graph::BuildPath() {
-	//Updates start and end distances
+	//Sets heuristics values
 	for (int x = 0; x < mWidth; x++) {
 		for (int y = 0; y < mHeight; y++) {
 			Vertex* vertex = matrix[x][y];
-			vertex->startDis = abs(x - *start) + abs(y - *(start + 1));
-			vertex->endDis = abs(x - *end) + abs(y - *(end + 1));
+			vertex->heuristic = abs(x - *start) + abs(y - *(start + 1)) + abs(x - *end) + abs(y - *(end + 1)) + (*mazeP)[x][y] - 1;
 		}
 	}
 	//Starts pathfinding
@@ -70,16 +70,16 @@ bool Graph::CalculatePath(int x, int y)
 }
 
 vector<Vertex*> Graph::AdjacencyDistances(Vertex* vertex) {
-	vector<Vertex*> neighbors(4);
+	vector<Vertex*> neighbors(0);
 	//Finds valid neighbors
 	if (*((*vertex).adjacencies)) { //Right
-		neighbors.push_back(matrix[(*vertex).xPos - 1][(*vertex).yPos]);
+		neighbors.push_back(matrix[(*vertex).xPos + 1][(*vertex).yPos]);
 	}
 	if (*((*vertex).adjacencies + 1)) { //Up
 		neighbors.push_back(matrix[(*vertex).xPos][(*vertex).yPos - 1]);
 	}
 	if (*((*vertex).adjacencies + 2)) { //Left
-		neighbors.push_back(matrix[(*vertex).xPos + 1][(*vertex).yPos]);
+		neighbors.push_back(matrix[(*vertex).xPos - 1][(*vertex).yPos]);
 	}
 	if (*((*vertex).adjacencies + 3)) { //Down
 		neighbors.push_back(matrix[(*vertex).xPos][(*vertex).yPos + 1]);
@@ -89,7 +89,7 @@ vector<Vertex*> Graph::AdjacencyDistances(Vertex* vertex) {
 }
 
 bool sortDis(const Vertex* a, const Vertex* b) {
-	return ((*a).startDis + (*a).endDis) < ((*b).startDis + (*b).endDis);
+	return (*a).heuristic < (*b).heuristic;
 }
 
 
