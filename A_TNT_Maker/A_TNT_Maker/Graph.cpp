@@ -43,30 +43,32 @@ void Graph::BuildPath() {
 	for (int x = 0; x < mWidth; x++) {
 		for (int y = 0; y < mHeight; y++) {
 			Vertex* vertex = matrix[x][y];
-			vertex->heuristic = abs(x - *start) + abs(y - *(start + 1)) + abs(x - *end) + abs(y - *(end + 1)) + (*mazeP)[x][y] - 1;
+			vertex->heuristic = pathLength + abs(x - *end) + abs(y - *(end + 1)) + (*mazeP)[x][y] - 1; //Distance along path + distance from end + move weight of space
 		}
 	}
 	//Starts pathfinding
 	CalculatePath(*start, *(start + 1));
 }
 
-bool Graph::CalculatePath(int x, int y)
+int Graph::CalculatePath(int x, int y)
 {
 	Vertex* vertex = matrix[x][y];
-	if ((*mazeP)[x][y] == 0 || (*vertex).visited) return false;
+	if ((*mazeP)[x][y] == 0 || (*vertex).visited) return INT_MAX;
 	//Add vertex to path
 	(*path).push_back(vertex);
 	pathLength++;
-	if (x == *end && y == *(end + 1)) return true; //Reached end
+	if (x == *end && y == *(end + 1)) return pathLength; //Reached end
 	(*vertex).visited = true;
 	//Recursively finds next step, in order of distance from the endpoint
+	int shortPath = INT_MAX;
 	for (Vertex* neighbor : AdjacencyDistances(vertex)) {
-		if (CalculatePath((*neighbor).xPos, (*neighbor).yPos)) return true;
+		int curPath = CalculatePath((*neighbor).xPos, (*neighbor).yPos);
+		if (curPath < shortPath) shortPath = curPath;
 	}
 	//Removes vertex from path if there is no path from it
 	(*path).pop_back();
 	pathLength--;
-	return false;
+	return shortPath;
 }
 
 vector<Vertex*> Graph::AdjacencyDistances(Vertex* vertex) {

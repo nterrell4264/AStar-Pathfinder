@@ -24,7 +24,7 @@ public:
 
 	void BuildPath(); //Initializes pathfinding
 private:
-	bool CalculatePath(int x, int y); //Recursive pathfinding function
+	int CalculatePath(int x, int y); //Recursive pathfinding function
 	vector<Vertex*> AdjacencyDistances(Vertex* vertex); //Returns a sorted list of a vertex's neighbors using the distance heuristic
 };
 
