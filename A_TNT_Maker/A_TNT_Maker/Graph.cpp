@@ -57,15 +57,21 @@ int Graph::CalculatePath(int x, int y)
 	//Add vertex to path
 	(*path).push_back(vertex);
 	pathLength++;
-	if (x == *end && y == *(end + 1)) return pathLength; //Reached end
+	if (x == *end && y == *(end + 1)) {
+		SetShortestPath();
+		(*path).pop_back();
+		pathLength--;
+		return pathLength; //Reached end
+	}
 	(*vertex).visited = true;
 	//Recursively finds next step, in order of distance from the endpoint
+	int curPath = INT_MAX;
 	int shortPath = INT_MAX;
 	for (Vertex* neighbor : AdjacencyDistances(vertex)) {
-		int curPath = CalculatePath((*neighbor).xPos, (*neighbor).yPos);
+		curPath = CalculatePath((*neighbor).xPos, (*neighbor).yPos);
 		if (curPath < shortPath) shortPath = curPath;
 	}
-	//Removes vertex from path if there is no path from it
+	//Removes vertex from path once we're done with it
 	(*path).pop_back();
 	pathLength--;
 	return shortPath;
@@ -94,4 +100,23 @@ bool sortDis(const Vertex* a, const Vertex* b) {
 	return (*a).heuristic < (*b).heuristic;
 }
 
+void Graph::SetShortestPath()
+{
+	if (pathLength > finalPathLength)
+	{
+		return;
+	}
 
+	if (finalPath != nullptr) //Deletes previous shortest path if it exists
+	{
+		delete[] finalPath;
+	}
+	//Creates and populates array with coordinates of path's vertices
+	finalPathLength = pathLength;
+	finalPath = new int*[finalPathLength];
+	for (int i = 0; i < pathLength; i++) {
+		finalPath[i] = new int[2];
+		*finalPath[i] = (*path)[i]->xPos; //X
+		*(finalPath[i]+1) = (*path)[i]->yPos; //Y
+	}
+}
