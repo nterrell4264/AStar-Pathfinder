@@ -14,7 +14,7 @@ for(int i = 0; i < 3; i++)
 	cameras[i].position = mainShape.position + cos(angle) * distance;
 }
 
-//Registering keyboard input
+//Registering user's keyboard input
 Input::GetInstance()->Init(window);
 
 if(glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
