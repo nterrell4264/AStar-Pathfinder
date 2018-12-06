@@ -1,5 +1,43 @@
 #include "Camera.h"
 
+/*
+To be added in Main after shapes are created:
+
+//Third Person POV
+//Loop through each camera
+for(int i = 0; i < 3; i++)
+{
+	// Use gluLookAt to lock the camera onto the player's character
+	gluLookAt(cameras[i].x, cameras[i].y, cameras[i].z, mainShape.x, mainShape.y, mainShape.z, 0, 1, 0);
+
+	//Update camera's position as character moves
+	cameras[i].position = mainShape.position + cos(angle) * distance;
+}
+
+//Registering keyboard input
+Input::GetInstance()->Init(window);
+
+if(glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+{
+	//Start the application
+	//Gives player control over the character
+}
+
+if(glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+{
+	//Pause the application
+}
+
+if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+{
+	//Reset the application
+}
+
+if(glfwGetKey(window, GLFW_KEY_Q) == GFLW_PRESS)
+{
+	//Quit the application
+}
+*/
 Camera::Camera() { //pls no userino in code
 	width = new int;
 	height = new int;
@@ -57,6 +95,7 @@ Camera & Camera::operator=(const Camera & other)
 }
 
 void Camera::Update() {
+
 	//Movement
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) position += forward * speed;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) position -= forward * speed;
@@ -66,7 +105,6 @@ void Camera::Update() {
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) position += up * speed;
 
 	//Viewport setup
-
 	glm::mat4 view = glm::lookAtLH(position, position + forward, up);
 	glm::mat4 projection = glm::perspectiveFovLH<GLfloat>(glm::pi<float>() / 3.0f, (float)*width, (float)*height, 0.01f, 100.f);
 
