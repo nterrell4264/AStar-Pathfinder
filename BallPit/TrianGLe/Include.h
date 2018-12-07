@@ -13,3 +13,6 @@ using namespace std;
 //#include "Mesh.h"
 #include "Shape.h"
 #include "Camera.h"
+
+//Global variables
+const float PI = 3.14159f;

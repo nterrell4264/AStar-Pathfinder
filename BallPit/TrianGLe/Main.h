@@ -12,11 +12,11 @@ int camIndex = 0;
 bool camKeyPressed = false;
 
 //Shape stuff
-Shape** rings;
-//Mesh* ringMesh = nullptr;
-const int ringCount = 10;
+Shape** balls;
+//Mesh* ballMesh = nullptr;
+const int ballCount = 10;
 const int parts = 16;
 
-Shape* MakeRing(float originX, float originY, float originZ, float ringRadius, float ringWidth, GLuint shader);
+Shape* MakeSphere(float originX, float originY, float originZ, float radius, GLuint shader);
 
 void mouseWrapper(GLFWwindow* window, double xpos, double ypos);
