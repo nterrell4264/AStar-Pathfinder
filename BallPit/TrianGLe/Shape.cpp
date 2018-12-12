@@ -1,7 +1,11 @@
 #include "Shape.h"
 
-Shape::Shape(float xPos, float yPos, float zPos)
+Shape::Shape(bool isDynamic, float shapeMass, float xPos, float yPos, float zPos)
 {
+	dynamic = isDynamic;
+	mass = shapeMass;
+	linForces = vector<vec3*>();
+	angForces = vector<vec3*>();
 	position = vec3(xPos, yPos, xPos);
 	rotation = vec3(0);
 	//mesh = new Mesh();
@@ -11,6 +15,10 @@ Shape::~Shape()
 	//mesh = nullptr;
 }
 
+void Shape::ApplyForce(vec3 force, vec3 location) {
+	linForces.push_back(new vec3(/*project(force,location - position)*/)); 
+	angForces.push_back(new vec3(cross(force, location - position)));
+}
 void Shape::Translate(float dx, float dy, float dz) {
 	position += vec3(dx,dy,dz);
 }
@@ -25,6 +33,21 @@ void Shape::Render() {
 	//glBindVertexArray(0);
 }
 void Shape::Update() {
+	acceleration = vec3(0);
+	angAccel = vec3(0);
+	for (vec3* force : linForces) {
+		acceleration += *force / mass;
+	}
+	for (vec3* force : angForces) {
+		angAccel += *force / mass;
+	}
+
+	//velocity += acceleration * time_t;
+	//angVelocity += angAccel * time_t;
+
+	//position += velocity * time_t;
+	//rotation += angVelocity * time_t;
+
 	//mesh->Update();
 }
 
