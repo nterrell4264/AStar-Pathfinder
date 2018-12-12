@@ -62,6 +62,51 @@ int main() {
 	#pragma endregion
 
 	#pragma region Shapes
+	//Unfilled rectangle for the balls
+	GLfloat rectVertices[] = {
+		-1.0f,-1.0f,-1.0f, // triangle 1 : begin
+		-1.0f,-1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f, // triangle 1 : end
+		1.0f, 1.0f,-1.0f, // triangle 2 : begin
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f,-1.0f, // triangle 2 : end
+		1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f,-1.0f,
+		1.0f,-1.0f,-1.0f,
+		1.0f, 1.0f,-1.0f,
+		1.0f,-1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f,-1.0f,
+		1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f, 1.0f,
+		-1.0f,-1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f,-1.0f, 1.0f,
+		1.0f,-1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f,-1.0f,-1.0f,
+		1.0f, 1.0f,-1.0f,
+		1.0f,-1.0f,-1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f,-1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f,-1.0f,
+		-1.0f, 1.0f,-1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f,-1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+		1.0f,-1.0f, 1.0f
+	};
+
+	Shape* box = new Shape();
+	box->SetVertices(12, rectVertices);
+	box->InitializeGL(shaderProgram);
+
+	//Balls
 	balls = new Shape*[ballCount]();
 	balls[0] = MakeSphere(0.f, 0.f, 0.f, .5f, shaderProgram);
 	/*for(int i = 1; i < ballCount; i++)
@@ -92,6 +137,10 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(.25f, 0.7f, 0.6f, 1.0f);
 
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		box->Render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 		//Mesh function
 		/*for (int i = 0; i < 8; i++) {
 			balls[i]->Render();
@@ -111,6 +160,8 @@ int main() {
 
 	delete[] balls;
 	//delete ballMesh;
+
+	delete box;
 
 	delete[] cameras;
 	mainCamera = nullptr;
