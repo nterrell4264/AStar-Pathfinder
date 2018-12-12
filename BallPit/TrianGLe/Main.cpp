@@ -130,6 +130,35 @@ int main() {
 			camKeyPressed = false;
 		}
 
+		//Lock camera onto the main shape
+		mainCamera->position = balls[0]->position + glm::vec3(0.0, mainCamera->position.y, 0.0);
+
+		//Registering user's keyboard input
+		Input::GetInstance()->Init(window);
+
+		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+		{
+			//Start the application
+			//Gives player control over the character
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+		{
+			//Pause the application
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+		{
+			//Reset the application
+			//glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		{
+			//Quit the application
+			exit(0);
+		}
+
 		//Camera input/recalculation
 		mainCamera->Update();
 
