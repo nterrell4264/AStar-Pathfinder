@@ -16,8 +16,9 @@ Shape::~Shape()
 }
 
 void Shape::ApplyForce(vec3 force, vec3 location) {
-	linForces.push_back(new vec3(/*project(force,location - position)*/)); 
-	angForces.push_back(new vec3(cross(force, location - position)));
+	vec3 distance = location - position;
+	linForces.push_back(new vec3(dot(force, distance) / distance.length * distance)); 
+	angForces.push_back(new vec3(cross(force, distance)));
 }
 void Shape::Translate(float dx, float dy, float dz) {
 	position += vec3(dx,dy,dz);
@@ -33,21 +34,29 @@ void Shape::Render() {
 	//glBindVertexArray(0);
 }
 void Shape::Update() {
-	acceleration = vec3(0);
-	angAccel = vec3(0);
-	for (vec3* force : linForces) {
-		acceleration += *force / mass;
+	if (dynamic) {
+		//Adds specific universal forces
+		ApplyForce(vec3(0, -9.8f*mass, 0), position); //Gravity
+
+		//Updates physics values
+		acceleration = vec3(0);
+		angAccel = vec3(0);
+		for (vec3* force : linForces) {
+			acceleration += *force / mass;
+		}
+		for (vec3* force : angForces) {
+			angAccel += *force / mass;
+		}
+
+		//velocity += acceleration * time_t;
+		//angVelocity += angAccel * time_t;
+
+		//position += velocity * time_t;
+		//rotation += angVelocity * time_t;
+
+		linForces.clear();
+		angForces.clear();
 	}
-	for (vec3* force : angForces) {
-		angAccel += *force / mass;
-	}
-
-	//velocity += acceleration * time_t;
-	//angVelocity += angAccel * time_t;
-
-	//position += velocity * time_t;
-	//rotation += angVelocity * time_t;
-
 	//mesh->Update();
 }
 

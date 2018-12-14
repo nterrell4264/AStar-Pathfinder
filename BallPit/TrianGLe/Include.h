@@ -12,8 +12,10 @@ using namespace std;
 #include "shader.h"
 #include "Mesh.h"
 #include "Shape.h"
+#include "Ball.h"
 #include "Camera.h"
 #include "Input.h"
 
 //Global variables
 const float PI = 3.14159f;
+const int parts = 16; //Subdivisions of circular models

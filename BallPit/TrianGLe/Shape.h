@@ -35,7 +35,7 @@ public:
 	//Render functions
 	void Render();
 	void InitializeGL(GLuint shader);
-	void SetVertices(GLfloat triNum, GLfloat points[]);
+	virtual void SetVertices(GLfloat triNum, GLfloat points[]);
 
 	//Data-related functions
 	void Update();

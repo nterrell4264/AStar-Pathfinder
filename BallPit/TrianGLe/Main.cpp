@@ -102,7 +102,7 @@ int main() {
 		1.0f,-1.0f, 1.0f
 	};
 
-	Shape* box = new Shape();
+	Shape* box = new Shape(false);
 	box->SetVertices(12, rectVertices);
 	box->InitializeGL(shaderProgram);
 
@@ -114,7 +114,7 @@ int main() {
 	#pragma endregion
 
 	#pragma region Draw loop
-	while (!glfwWindowShouldClose(window))//Draw loop
+	while (!glfwWindowShouldClose(window))
 	{
 		//General input
 		glfwPollEvents();
@@ -129,9 +129,6 @@ int main() {
 		else {
 			camKeyPressed = false;
 		}
-
-		//Lock camera onto the main shape
-		mainCamera->position = balls[0]->position + glm::vec3(0.0, mainCamera->position.y, 0.0);
 
 		//Registering user's keyboard input
 		Input::GetInstance()->Init(window);
@@ -159,6 +156,11 @@ int main() {
 			exit(0);
 		}
 
+		//Updates scene
+		balls[0]->Update();
+
+		//Lock camera onto the main shape
+		mainCamera->position = balls[0]->position + glm::vec3(0.0, mainCamera->position.y, 0.0);
 		//Camera input/recalculation
 		mainCamera->Update();
 
@@ -171,7 +173,7 @@ int main() {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		//Mesh function
-		/*for (int i = 0; i < 8; i++) {
+		/*for (int i = 0; i < ballCount; i++) {
 			balls[i]->Render();
 		}*/
 		balls[0]->Render();
@@ -204,69 +206,10 @@ int main() {
 }
 
 Shape* MakeSphere(float originX, float originY, float originZ, float radius, GLuint shader) {
-	Shape* ball = new Shape(originX, originY, originZ);
+	Ball* ball = new Ball(true, radius, 1.f, originX, originY, originZ);
 	//if (ballMesh == nullptr) { //Creates one mesh (pun not intended) for all balls
 	const int vertexCount = (parts / 2 - 1) * parts * 18;
 	GLfloat ballVertices[vertexCount];
-	for (int j = 0; j < parts; j++) { //Triangles connecting to top vertex
-		//Vertex 1: top
-		ballVertices[j * 9] = originX;
-		ballVertices[j * 9 + 1] = originY + radius;
-		ballVertices[j * 9 + 2] = originZ;
-		//Vertex 2: current point on next circle
-		ballVertices[j * 9 + 3] = originX + cos((PI / 2) * (1 - (4.f / parts))) * (cos(j * 2 * PI / parts)) * radius;
-		ballVertices[j * 9 + 4] = originY + sin((PI / 2) * (1 - (4.f / parts))) * radius;
-		ballVertices[j * 9 + 5] = originZ + cos((PI / 2) * (1 - (4.f / parts))) * (sin(j * 2 * PI / parts)) * radius;
-		//Vertex 3: next point on next circle
-		ballVertices[j * 9 + 6] = originX + cos((PI / 2) * (1 - (4.f / parts))) * (cos((j + 1) * 2 * PI / parts)) * radius;
-		ballVertices[j * 9 + 7] = originY + sin((PI / 2) * (1 - (4.f / parts))) * radius;
-		ballVertices[j * 9 + 8] = originZ + cos((PI / 2) * (1 - (4.f / parts))) * (sin((j + 1) * 2 * PI / parts)) * radius;
-	}
-	for (int j = 0; j < parts; j++) { //Triangles connecting to bottom vertex
-		//Vertex 1: bottom
-		ballVertices[(parts + j) * 9] = originX;
-		ballVertices[(parts + j) * 9 + 1] = originY - radius;
-		ballVertices[(parts + j) * 9 + 2] = originZ;
-		//Vertex 2: current point on next circle
-		ballVertices[(parts + j) * 9 + 3] = originX + cos((PI / 2) * (1 - ((parts / 2.f - 1) * 4 / parts))) * (cos(j * 2 * PI / parts)) * radius;
-		ballVertices[(parts + j) * 9 + 4] = originY + sin((PI / 2) * (1 - ((parts / 2.f - 1) * 4 / parts))) * radius;
-		ballVertices[(parts + j) * 9 + 5] = originZ + cos((PI / 2) * (1 - ((parts / 2.f - 1) * 4 / parts))) * (sin(j * 2 * PI / parts)) * radius;
-		//Vertex 3: next point on next circle
-		ballVertices[(parts + j) * 9 + 6] = originX + cos((PI / 2) * (1 - ((parts / 2.f - 1) * 4 / parts))) * (cos((j + 1) * 2 * PI / parts)) * radius;
-		ballVertices[(parts + j) * 9 + 7] = originY + sin((PI / 2) * (1 - ((parts / 2.f - 1) * 4 / parts))) * radius;
-		ballVertices[(parts + j) * 9 + 8] = originZ + cos((PI / 2) * (1 - ((parts / 2.f - 1) * 4 / parts))) * (sin((j + 1) * 2 * PI / parts)) * radius;
-	}
-	for (int i = 1; i < parts / 2 - 1; i++) { //Intermediary bands
-		for (int j = 0; j < parts; j++) {
-			//Triangle between two faces on current angle and one on next angle.
-			//Vertex 1: current point
-			ballVertices[(i * parts + j) * 18] = originX + cos((PI / 2) * (1 - (i * 4.f / parts))) * (cos(j * 2 * PI / parts)) * radius;
-			ballVertices[(i * parts + j) * 18 + 1] = originY + sin((PI / 2) * (1 - (i * 4.f / parts))) * radius;
-			ballVertices[(i * parts + j) * 18 + 2] = originZ + cos((PI / 2) * (1 - (i * 4.f / parts))) * (sin(j * 2 * PI / parts)) * radius;
-			//Vertex 2: equivalent point on next circle
-			ballVertices[(i * parts + j) * 18 + 3] = originX + cos((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * (cos(j * 2 * PI / parts)) * radius;
-			ballVertices[(i * parts + j) * 18 + 4] = originY + sin((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * radius;
-			ballVertices[(i * parts + j) * 18 + 5] = originZ + cos((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * (sin(j * 2 * PI / parts)) * radius;
-			//Vertex 3: next point on next circle
-			ballVertices[(i * parts + j) * 18 + 6] = originX + cos((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * (cos((j + 1) * 2 * PI / parts)) * radius;
-			ballVertices[(i * parts + j) * 18 + 7] = originY + sin((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * radius;
-			ballVertices[(i * parts + j) * 18 + 8] = originZ + cos((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * (sin((j + 1) * 2 * PI / parts)) * radius;
-			//Triangle between two faces on current angle and one on next angle.
-			//Vertex 1: current point
-			ballVertices[(i * parts + j) * 18 + 9] = originX + cos((PI / 2) * (1 - (i * 4.f / parts))) * (cos(j * 2 * PI / parts)) * radius;
-			ballVertices[(i * parts + j) * 18 + 10] = originY + sin((PI / 2) * (1 - (i * 4.f / parts))) * radius;
-			ballVertices[(i * parts + j) * 18 + 11] = originZ + cos((PI / 2) * (1 - (i * 4.f / parts))) * (sin(j * 2 * PI / parts)) * radius;
-			//Vertex 2: next point on this circle
-			ballVertices[(i * parts + j) * 18 + 12] = originX + cos((PI / 2) * (1 - (i * 4.f / parts))) * (cos((j + 1) * 2 * PI / parts)) * radius;
-			ballVertices[(i * parts + j) * 18 + 13] = originY + sin((PI / 2) * (1 - (i * 4.f / parts))) * radius;
-			ballVertices[(i * parts + j) * 18 + 14] = originZ + cos((PI / 2) * (1 - (i * 4.f / parts))) * (sin((j + 1) * 2 * PI / parts)) * radius;
-			//Vertex 3: next point on next circle
-			ballVertices[(i * parts + j) * 18 + 15] = originX + cos((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * (cos((j + 1) * 2 * PI / parts)) * radius;
-			ballVertices[(i * parts + j) * 18 + 16] = originY + sin((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * radius;
-			ballVertices[(i * parts + j) * 18 + 17] = originZ + cos((PI / 2) * (1 - ((i + 1) * 4.f / parts))) * (sin((j + 1) * 2 * PI / parts)) * radius;
-		}
-	}
-	ball->SetVertices(vertexCount / 9, ballVertices);
 	ball->InitializeGL(shader);
 	//}
 	return ball;
