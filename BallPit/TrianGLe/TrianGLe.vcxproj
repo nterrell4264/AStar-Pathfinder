@@ -168,6 +168,7 @@ copy "$(SolutionDir)include\glew-2.1.0\bin\Release\Win32\*.*" "$(SolutionDir)_Bi
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="Shape.cpp" />
   </ItemGroup>
@@ -178,6 +179,7 @@ copy "$(SolutionDir)include\glew-2.1.0\bin\Release\Win32\*.*" "$(SolutionDir)_Bi
     <ClInclude Include="Input.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="Shape.h" />
   </ItemGroup>
