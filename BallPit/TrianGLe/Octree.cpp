@@ -1,6 +1,7 @@
+#pragma once
 #include "Octree.h"
 
-Octree::Octree(vec3 location, vec3 maxDistances, Octree* creator = nullptr)
+Octree::Octree(vec3 location, vec3 maxDistances, Octree* creator)
 {
 	position = location;
 	bounds = maxDistances;
@@ -16,7 +17,9 @@ Octree::~Octree()
 }
 
 void Octree::Update() {
+	for (int i = 0; i < shapes.size(); i++) {
 
+	}
 }
 
 void Octree::AddShape(Shape* shape)
@@ -25,11 +28,11 @@ void Octree::AddShape(Shape* shape)
 		shape->position.y < position.y - bounds.y || shape->position.y > position.y + bounds.y ||
 		shape->position.z < position.z - bounds.z || shape->position.z > position.z + bounds.z) return;
 	shapes.push_back(shape);
-	if (shapes.size > maxShapes) Subdivide();
+	if (shapes.size() > maxShapes) Subdivide();
 }
 void Octree::RemoveShape(Shape* shape)
 {
-	for (int i = 0; i < shapes.size; i++) {
+	for (int i = 0; i < shapes.size(); i++) {
 		if (shapes[i] == shape) {
 			shapes.erase(shapes.begin() + i);
 			break;
@@ -38,10 +41,10 @@ void Octree::RemoveShape(Shape* shape)
 	if (parent != nullptr && parent->CountShapes() < maxShapes) parent->Collapse();
 }
 int Octree::CountShapes() {
-	if (children == nullptr) return shapes.size;
+	if (children == nullptr) return shapes.size();
 	int total = 0;
 	for (int i = 0; i < 8; i++) {
-		total += children[i]->shapes.size;
+		total += children[i]->shapes.size();
 	}
 	return total;
 }

@@ -1,8 +1,6 @@
 #include "Ball.h"
 
-
-
-Ball::Ball(bool isDynamic, float collRadius, float shapeMass = 1.f, float xPos = 0, float yPos = 0, float zPos = 0) : Shape(isDynamic, shapeMass, xPos, yPos, zPos)
+Ball::Ball(bool isDynamic, float collRadius, float shapeMass, float xPos, float yPos, float zPos) : Shape(isDynamic, shapeMass, xPos, yPos, zPos)
 {
 	radius = collRadius;
 	SetVertices();

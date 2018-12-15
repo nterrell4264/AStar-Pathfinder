@@ -7,8 +7,8 @@ int main() {
 	//Initializes the GLFW
 	if (glfwInit() == GLFW_FALSE)
 	{
-		std::cout << "GLFW failed to initialize" << std::endl;
-		std::cin.get();
+		cout << "GLFW failed to initialize" << endl;
+		cin.get();
 		_CrtDumpMemoryLeaks();
 		return 1;
 	}
@@ -19,7 +19,7 @@ int main() {
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Moveable Camera", nullptr, nullptr);
 	if (window == nullptr)
 	{
-		std::cout << "Failed to create GLFW window" << std::endl;
+		cout << "Failed to create GLFW window" << endl;
 		glfwTerminate();
 		return EXIT_FAILURE;
 	}
@@ -33,9 +33,9 @@ int main() {
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
 	{
-		std::cout << "Failed to initialize GLEW" << std::endl;
+		cout << "Failed to initialize GLEW" << endl;
 		glfwTerminate();
-		std::cin.get();
+		cin.get();
 		_CrtDumpMemoryLeaks();
 		return EXIT_FAILURE;
 	}

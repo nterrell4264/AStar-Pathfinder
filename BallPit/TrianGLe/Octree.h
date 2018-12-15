@@ -1,5 +1,6 @@
 #pragma once
 #include "Include.h"
+#include "Shape.h"
 class Octree
 {
 public:

@@ -1,3 +1,4 @@
+#pragma once
 #include "Shape.h"
 
 Shape::Shape(bool isDynamic, float shapeMass, float xPos, float yPos, float zPos)
@@ -17,7 +18,7 @@ Shape::~Shape()
 
 void Shape::ApplyForce(vec3 force, vec3 location) {
 	vec3 distance = location - position;
-	linForces.push_back(new vec3(dot(force, distance) / distance.length * distance)); 
+	linForces.push_back(new vec3(dot(force, distance) / distance.length() * distance)); 
 	angForces.push_back(new vec3(cross(force, distance)));
 }
 void Shape::Translate(float dx, float dy, float dz) {
