@@ -11,6 +11,15 @@ Shape::Shape(bool isDynamic, float shapeMass, float xPos, float yPos, float zPos
 	rotation = vec3(0);
 	//mesh = new Mesh();
 }
+/*Shape::Shape(bool isDynamic, float shapeMass, vec3 location)
+{
+	dynamic = isDynamic;
+	mass = shapeMass;
+	linForces = vector<vec3*>();
+	angForces = vector<vec3*>();
+	position = location;
+	rotation = vec3(0);
+}*/
 Shape::~Shape()
 {
 	//mesh = nullptr;

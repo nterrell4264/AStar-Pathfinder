@@ -11,4 +11,7 @@ using namespace std;
 
 //Global variables
 const float PI = 3.14159f;
+const float friction = .03f; //Frictional force reduction coefficient
+
 const int parts = 16; //Subdivisions of circular models
+const vec3 bounds = vec3(5.f,5.f,5.f); //Outer bounds of ballpit

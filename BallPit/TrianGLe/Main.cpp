@@ -64,42 +64,42 @@ int main() {
 	#pragma region Shapes
 	//Unfilled rectangle for the balls
 	GLfloat rectVertices[] = {
-		-1.0f,-1.0f,-1.0f, // triangle 1 : begin
-		-1.0f,-1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f, // triangle 1 : end
-		1.0f, 1.0f,-1.0f, // triangle 2 : begin
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f,-1.0f, // triangle 2 : end
-		1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f,-1.0f,
-		1.0f,-1.0f,-1.0f,
-		1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f,-1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f,-1.0f,
-		1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f,-1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,-1.0f,
-		-1.0f, 1.0f,-1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f
+		-bounds.x,-bounds.y,-bounds.z, // triangle 1 : begin
+		-bounds.x,-bounds.y, bounds.z,
+		-bounds.x, bounds.y, bounds.z, // triangle 1 : end
+		bounds.x, bounds.y,-bounds.z, // triangle 2 : begin
+		-bounds.x,-bounds.y,-bounds.z,
+		-bounds.x, bounds.y,-bounds.z, // triangle 2 : end
+		bounds.x,-bounds.y, bounds.z,
+		-bounds.x,-bounds.y,-bounds.z,
+		bounds.x,-bounds.y,-bounds.z,
+		bounds.x, bounds.y,-bounds.z,
+		bounds.x,-bounds.y,-bounds.z,
+		-bounds.x,-bounds.y,-bounds.z,
+		-bounds.x,-bounds.y,-bounds.z,
+		-bounds.x, bounds.y, bounds.z,
+		-bounds.x, bounds.y,-bounds.z,
+		bounds.x,-bounds.y, bounds.z,
+		-bounds.x,-bounds.y, bounds.z,
+		-bounds.x,-bounds.y,-bounds.z,
+		-bounds.x, bounds.y, bounds.z,
+		-bounds.x,-bounds.y, bounds.z,
+		bounds.x,-bounds.y, bounds.z,
+		bounds.x, bounds.y, bounds.z,
+		bounds.x,-bounds.y,-bounds.z,
+		bounds.x, bounds.y,-bounds.z,
+		bounds.x,-bounds.y,-bounds.z,
+		bounds.x, bounds.y, bounds.z,
+		bounds.x,-bounds.y, bounds.z,
+		bounds.x, bounds.y, bounds.z,
+		bounds.x, bounds.y,-bounds.z,
+		-bounds.x, bounds.y,-bounds.z,
+		bounds.x, bounds.y, bounds.z,
+		-bounds.x, bounds.y,-bounds.z,
+		-bounds.x, bounds.y, bounds.z,
+		bounds.x, bounds.y, bounds.z,
+		-bounds.x, bounds.y, bounds.z,
+		bounds.x,-bounds.y, bounds.z
 	};
 
 	Shape* box = new Shape(false);
@@ -107,8 +107,16 @@ int main() {
 	box->InitializeGL(shaderProgram);
 
 	//Balls
-	balls = new Shape*[ballCount]();
-	balls[0] = MakeSphere(0.f, 0.f, 0.f, .5f, shaderProgram);
+	area = new Octree(vec3(0), bounds);
+	for(int k = 0; k < 2; k++) {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++) {
+				area->AddBall(MakeSphere(-4 + 2 * i, k, -4 + 2 * j, .5f, shaderProgram));
+			}
+		}
+	}
+	//balls = new Shape*[ballCount]();
+	playerBall = MakeSphere(0.f, 3.f, 0.f, .5f, shaderProgram);
 	/*for(int i = 1; i < ballCount; i++)
 		balls[i] = MakeSphere(rand() % 11 - 5, rand() % 7 - 3, rand() % 11 - 5, .5f, shaderProgram);*/
 	#pragma endregion
@@ -157,10 +165,11 @@ int main() {
 		}
 
 		//Updates scene
-		balls[0]->Update();
+		//balls[0]->Update();
+		area->Update();
 
 		//Lock camera onto the main shape
-		mainCamera->position = balls[0]->position + glm::vec3(0.0, mainCamera->position.y, 0.0);
+		mainCamera->position = playerBall->position + glm::vec3(0.0, mainCamera->position.y, 0.0);
 		//Camera input/recalculation
 		mainCamera->Update();
 
@@ -176,7 +185,8 @@ int main() {
 		/*for (int i = 0; i < ballCount; i++) {
 			balls[i]->Render();
 		}*/
-		balls[0]->Render();
+		//balls[0]->Render();
+		area->Render();
 
 		//'clear' for next draw call
 		//glDisableVertexAttribArray(attribIndex);
@@ -189,7 +199,7 @@ int main() {
 	//Cleanup
 	glfwTerminate();
 
-	delete[] balls;
+	//delete[] balls;
 	//delete ballMesh;
 
 	delete box;
@@ -205,13 +215,9 @@ int main() {
 	#pragma endregion
 }
 
-Shape* MakeSphere(float originX, float originY, float originZ, float radius, GLuint shader) {
+Ball* MakeSphere(float originX, float originY, float originZ, float radius, GLuint shader) {
 	Ball* ball = new Ball(true, radius, 1.f, originX, originY, originZ);
-	//if (ballMesh == nullptr) { //Creates one mesh (pun not intended) for all balls
-	const int vertexCount = (parts / 2 - 1) * parts * 18;
-	GLfloat ballVertices[vertexCount];
 	ball->InitializeGL(shader);
-	//}
 	return ball;
 }
 

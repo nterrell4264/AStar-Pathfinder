@@ -5,6 +5,7 @@ class Shape
 {
 public:
 	Shape(bool isDynamic, float shapeMass = 1.f, float xPos = 0, float yPos = 0, float zPos = 0);
+	//Shape(bool isDynamic, float shapeMass = 1.f, vec3 location = vec3(0));
 	~Shape();
 
 	//Physics data
@@ -37,11 +38,13 @@ public:
 	void InitializeGL(GLuint shader);
 	virtual void SetVertices(GLfloat triNum, GLfloat points[]);
 
-	//Data-related functions
-	void Update();
+	//Spatial functions
 	void ApplyForce(vec3 force, vec3 location);
 	void Translate(float dx = 0.f, float dy = 0.f, float dz = 0.f);
 	void Rotate(float rx = 0.f, float ry = 0.f, float rz = 0.f);
+
+	//Data functions
+	void Update();
 	void Reset();
 };
 

@@ -20,10 +20,12 @@ int camIndex = 0;
 bool camKeyPressed = false;
 
 //Shape stuff
-Shape** balls;
+Octree* area;
+Ball* playerBall;
+//Shape** balls;
 //Mesh* ballMesh = nullptr;
 const int ballCount = 10;
 
-Shape* MakeSphere(float originX, float originY, float originZ, float radius, GLuint shader);
+Ball* MakeSphere(float originX, float originY, float originZ, float radius, GLuint shader);
 
 void mouseWrapper(GLFWwindow* window, double xpos, double ypos);
