@@ -59,12 +59,12 @@ Camera & Camera::operator=(const Camera & other)
 void Camera::Update() {
 
 	//Movement
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) position += forward * speed;
+	/*if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) position += forward * speed;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) position -= forward * speed;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) position += cross(forward, up) * speed;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) position -= cross(forward, up) * speed;
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) position -= up * speed;
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) position += up * speed;
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) position += up * speed;*/
 
 	//Viewport setup
 	glm::mat4 view = glm::lookAtLH(position, position + forward, up);

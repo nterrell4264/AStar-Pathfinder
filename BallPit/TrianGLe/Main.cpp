@@ -61,6 +61,9 @@ int main() {
 	mainCamera = cameras[0];
 	#pragma endregion
 
+	// Pause Screen variable
+	bool paused = false;
+
 	#pragma region Shapes
 	//Unfilled rectangle for the balls
 	GLfloat rectVertices[] = {
@@ -130,18 +133,12 @@ int main() {
 			camKeyPressed = false;
 		}
 
-		//Registering user's keyboard input
+		//Registering user's keyboard inputs
 		Input::GetInstance()->Init(window);
-
-		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
-		{
-			//Start the application
-			//Gives player control over the character
-		}
-
 		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
 		{
 			//Pause the application
+			paused = !paused;
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
@@ -156,11 +153,19 @@ int main() {
 			exit(0);
 		}
 
+		// Player's character movement inputs
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) balls[0]->position +=
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) balls[0]->position -= 
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) balls[0]->position += 
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) balls[0]->position -= 
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) balls[0]->position -= 
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) balls[0]->position += 
+
 		//Updates scene
 		balls[0]->Update();
 
 		//Lock camera onto the main shape
-		mainCamera->position = balls[0]->position + glm::vec3(0.0, mainCamera->position.y, 0.0);
+		mainCamera->position = balls[0]->position + glm::vec3(1.0, mainCamera->position.y, 0.0);
 		//Camera input/recalculation
 		mainCamera->Update();
 
