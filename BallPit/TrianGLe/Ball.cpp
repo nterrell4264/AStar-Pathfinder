@@ -11,6 +11,31 @@ Ball::~Ball()
 {
 }
 
+bool Ball::CollidesWith(Ball * other)
+{
+	return (this->position - other->position).length() - (this->radius + other->radius);
+}
+
+void Ball::ResolveCollision(Ball * other)
+{
+	float momentum = mass * velocity.length() + other->mass * other->velocity.length();
+}
+
+bool Ball::OutOfBounds()
+{
+	return abs(position.x) + radius > bounds.x || abs(position.y) + radius > bounds.y || abs(position.y) + radius > bounds.y;
+}
+
+void Ball::Rebound()
+{
+}
+
+void Ball::Shrink(float scale)
+{
+	radius *= scale;
+	for (float coord : pointData) coord *= scale;
+}
+
 void Ball::SetVertices() {
 	const int vertexCount = (parts / 2 - 1) * parts * 18;
 	GLfloat ballVertices[vertexCount];

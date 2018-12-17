@@ -1,5 +1,4 @@
 #pragma once
-#include "Include.h"
 #include "Shape.h"
 class Ball : public Shape
 {
@@ -8,6 +7,12 @@ public:
 	~Ball();
 
 	float radius;
+
+	bool CollidesWith(Ball* other);
+	void ResolveCollision(Ball* other);
+	bool OutOfBounds();
+	void Rebound();
+	void Shrink(float scale);
 
 	void SetVertices();
 };

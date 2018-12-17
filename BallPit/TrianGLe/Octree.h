@@ -1,6 +1,6 @@
 #pragma once
 #include "Include.h"
-#include "Shape.h"
+#include "Ball.h"
 class Octree
 {
 public:
@@ -11,19 +11,22 @@ public:
 	vec3 position;
 	vec3 bounds;
 
-	const int maxShapes = 8;
-	vector<Shape*> shapes;
+	const int maxBalls = 8;
+	vector<Ball*> balls;
+
 	Octree** children = nullptr;
 	Octree* parent = nullptr;
 
 	//Functions
 	void Update();
+	void Render();
 
-	void AddShape(Shape* shape);
-	void RemoveShape(Shape* shape);
-	int CountShapes();
+	void AddBall(Ball* ball);
+	void RemoveBall(Ball* ball);
+	int CountBalls();
 
 	void Subdivide();
 	void Collapse();
+	bool InRegion(Ball* ball, Octree* region);
 };
 
