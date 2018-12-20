@@ -57,7 +57,7 @@ void Octree::Render()
 {
 	for (Ball* ball : balls) ball->Render();
 	if (children != nullptr) {
-		//for (int i = 0; i < 8; i++) children[i]->Render();
+		for (int i = 0; i < 8; i++) children[i]->Render();
 	}
 }
 

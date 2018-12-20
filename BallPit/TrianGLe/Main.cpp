@@ -1,9 +1,19 @@
+/*
+Ballpit
+Nathan Terrell and Aiden Thinn
+IGME-309
+Final Project
+
+Resource(s):
+http://freemusicarchive.org/genre/Instrumental/
+*/
+
 #include "Main.h"
 
 ///Based on the tutorial made in ATLAS.
 
 int main() {
-	#pragma region GL Stuff
+#pragma region GL Stuff
 	//Initializes the GLFW
 	if (glfwInit() == GLFW_FALSE)
 	{
@@ -59,14 +69,15 @@ int main() {
 	//Cameras
 	cameras = new Camera*[3];
 	cameras[0] = new Camera(&shaderProgram, window, vec3(0.f, 0.f, -20.f));
-	cameras[1] = new Camera(&shaderProgram, window, vec3(10.f,5.f,0.f));
-	cameras[2] = new Camera(&shaderProgram, window, vec3(0.f,-5.f,0.f));
+	cameras[1] = new Camera(&shaderProgram, window, vec3(10.f, 5.f, 0.f));
+	cameras[2] = new Camera(&shaderProgram, window, vec3(0.f, -5.f, 0.f));
 	mainCamera = cameras[0];
-	#pragma endregion
+#pragma endregion
 
+	// Background Track
 	SoundEngine->play2D("../audio/background.mp3", GL_TRUE);
 
-	#pragma region Shapes
+#pragma region Shapes
 	//Unfilled rectangle for the balls
 	GLfloat rectVertices[] = {
 		-bounds.x,-bounds.y,-bounds.z, // triangle 1 : begin
@@ -113,7 +124,7 @@ int main() {
 
 	//Balls
 	area = new Octree(vec3(0), bounds);
-	for(int k = 0; k < 2; k++) {
+	for (int k = 0; k < 2; k++) {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
 				area->AddBall(MakeSphere(2 * (i - 3), k, 2 * (j - 3), .5f, shaderProgram));
@@ -124,8 +135,9 @@ int main() {
 	playerBall = MakeSphere(0.f, 3.f, 0.f, .5f, shaderProgram);
 	/*for(int i = 1; i < ballCount; i++)
 		balls[i] = MakeSphere(rand() % 11 - 5, rand() % 7 - 3, rand() % 11 - 5, .5f, shaderProgram);*/
-	#pragma endregion
+#pragma endregion
 
+	//Instruction for users
 	cout << "BALL PIT\nby Nathan Terrell & Aiden Thinn\n\nINSTRUCTIONS\nMovement:\nW - go forward\nA - go left\nS - go backward\nD - go right\nControls:\nR - reset\nP - pause\nQ - quit" << endl;
 
 	#pragma region Draw loop
@@ -159,8 +171,6 @@ int main() {
 				}
 				if (pauseTimer > 0) pauseTimer--;
 			}
-
-			
 		}
 
 		//Reset the application
@@ -171,9 +181,7 @@ int main() {
 
 		//Quit the application
 		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		{
 			exit(0);
-		}
 
 		// Player's character movement inputs
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) playerBall->position.z += .001;
@@ -208,9 +216,10 @@ int main() {
 		
 
 		area->Render();
+
 		playerBall->Update();
 		playerBall->Render();
-		
+
 		//'clear' for next draw call
 		//glDisableVertexAttribArray(attribIndex);
 		glBindVertexArray(0);
