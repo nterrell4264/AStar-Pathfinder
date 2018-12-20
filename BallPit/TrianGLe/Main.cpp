@@ -53,16 +53,18 @@ int main() {
 
 	glLinkProgram(shaderProgram);
 
+	//Audio
+	ISoundEngine *SoundEngine = createIrrKlangDevice();
+
 	//Cameras
 	cameras = new Camera*[3];
-	cameras[0] = new Camera(&shaderProgram, window);
+	cameras[0] = new Camera(&shaderProgram, window, vec3(0.f, 0.f, -20.f));
 	cameras[1] = new Camera(&shaderProgram, window, vec3(10.f,5.f,0.f));
 	cameras[2] = new Camera(&shaderProgram, window, vec3(0.f,-5.f,0.f));
 	mainCamera = cameras[0];
 	#pragma endregion
 
-	// Pause Screen variable
-	bool paused = false;
+	SoundEngine->play2D("../audio/background.mp3", GL_TRUE);
 
 	#pragma region Shapes
 	//Unfilled rectangle for the balls
@@ -114,7 +116,7 @@ int main() {
 	for(int k = 0; k < 2; k++) {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++) {
-				area->AddBall(MakeSphere(-4 + 2 * i, k, -4 + 2 * j, .5f, shaderProgram));
+				area->AddBall(MakeSphere(2 * (i - 3), k, 2 * (j - 3), .5f, shaderProgram));
 			}
 		}
 	}
@@ -124,12 +126,13 @@ int main() {
 		balls[i] = MakeSphere(rand() % 11 - 5, rand() % 7 - 3, rand() % 11 - 5, .5f, shaderProgram);*/
 	#pragma endregion
 
+	cout << "BALL PIT\nby Nathan Terrell & Aiden Thinn\n\nINSTRUCTIONS\nMovement:\nW - go forward\nA - go left\nS - go backward\nD - go right\nControls:\nR - reset\nP - pause\nQ - quit" << endl;
+
 	#pragma region Draw loop
 	while (!glfwWindowShouldClose(window))
 	{
 		//General input
 		glfwPollEvents();
-		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) break; //Exit command
 		if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) { //Switch cameras
 			if (!camKeyPressed) {
 				camIndex = (camIndex + 1) % 3;
@@ -143,38 +146,49 @@ int main() {
 
 		//Registering user's keyboard inputs
 		Input::GetInstance()->Init(window);
+
+		//Pause the application
 		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-		{
-			//Pause the application
-			paused = !paused;
+		{ 
+			Sleep(500);
+			int pauseTimer = 5000;
+			while (true) {
+				glfwPollEvents();
+				if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && pauseTimer <= 10) {
+					break;
+				}
+				if (pauseTimer > 0) pauseTimer--;
+			}
+
+			
 		}
 
+		//Reset the application
 		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
 		{
-			//Reset the application
-			//glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+			
 		}
 
+		//Quit the application
 		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		{
-			//Quit the application
 			exit(0);
 		}
 
 		// Player's character movement inputs
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) balls[0]->position +=
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) balls[0]->position -= 
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) balls[0]->position += 
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) balls[0]->position -= 
-		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) balls[0]->position -= 
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) balls[0]->position += 
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) playerBall->position.z += .001;
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) playerBall->position.z -= .001;
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) playerBall->position.x -= .001;
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) playerBall->position.x += .001;
+
+
+		//Lock the camera to the player's ball
+		mainCamera->position = playerBall->position -(13.0f * mainCamera->forward);
 
 		//Updates scene
 		//balls[0]->Update();
 		area->Update();
 
-		//Lock camera onto the main shape
-		mainCamera->position = playerBall->position + glm::vec3(0.0, mainCamera->position.y, 0.0);
 		//Camera input/recalculation
 		mainCamera->Update();
 
@@ -191,8 +205,12 @@ int main() {
 			balls[i]->Render();
 		}*/
 		//balls[0]->Render();
-		area->Render();
+		
 
+		area->Render();
+		playerBall->Update();
+		playerBall->Render();
+		
 		//'clear' for next draw call
 		//glDisableVertexAttribArray(attribIndex);
 		glBindVertexArray(0);

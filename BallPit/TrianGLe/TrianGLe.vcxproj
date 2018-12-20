@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ExecutablePath>$(SolutionDir)include\glew-2.1.0\bin\Release\Win32;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionDir)include\glew-2.1.0\include;$(SolutionDir)include\glfw-3.2.1\include;$(SolutionDir)include\glm;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)include\glew-2.1.0\lib;$(SolutionDir)include\glfw-3.2.1\lib-vc2015;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)include\glew-2.1.0\include;$(SolutionDir)include\glfw-3.2.1\include;$(SolutionDir)include\glm;$(SolutionDir)include\irrklang\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)include\glew-2.1.0\lib;$(SolutionDir)include\glfw-3.2.1\lib-vc2015;$(SolutionDir)include\irrklang\lib\Win32-visualStudio;$(SolutionDir)include\irrklang\bin\win32-visualStudio;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)_d</TargetName>
     <OutDir>$(SolutionDir)Z_DELETE\</OutDir>
     <IntDir>$(SolutionDir)Z_DELETE\$(ProjectName)\$(Configuration)\</IntDir>
@@ -104,7 +104,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)include\glew-2.1.0\lib\Release\Win32;$(SolutionDir)include\glfw-3.2.1\lib-vc2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>irrKlang.lib;opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)_Binary\"

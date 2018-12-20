@@ -7,7 +7,14 @@
 using namespace glm;
 
 #include <vector>
+#include <stdlib.h>
+#include <time.h>
+#include <Windows.h>
 using namespace std;
+
+#include <irrKlang.h>
+using namespace irrklang;
+
 
 //Global variables
 const float PI = 3.14159f;

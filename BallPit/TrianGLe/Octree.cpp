@@ -57,7 +57,7 @@ void Octree::Render()
 {
 	for (Ball* ball : balls) ball->Render();
 	if (children != nullptr) {
-		for (int i = 0; i < 8; i++) children[i]->Render();
+		//for (int i = 0; i < 8; i++) children[i]->Render();
 	}
 }
 
@@ -88,7 +88,7 @@ int Octree::CountBalls() {
 
 void Octree::Subdivide()
 {
-	if (children != nullptr) return; //idiotproof
+	if (children != nullptr) return; delete children; //idiotproof 
 	children = new Octree*[8];
 	children[0] = new Octree(vec3(position.x - bounds.x, position.y - bounds.y, position.z - bounds.z) / 2.f, vec3(bounds.x, bounds.y, bounds.z) / 2.f, this);//---
 	children[1] = new Octree(vec3(position.x - bounds.x, position.y - bounds.y, position.z + bounds.z) / 2.f, vec3(bounds.x, bounds.y, bounds.z) / 2.f, this);//--+
